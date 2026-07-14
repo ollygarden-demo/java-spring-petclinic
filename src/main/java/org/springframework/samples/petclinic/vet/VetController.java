@@ -20,6 +20,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.samples.petclinic.system.ProductTelemetry;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,7 +44,8 @@ class VetController {
 
 	@GetMapping("/vets.html")
 	public String showVetList(@RequestParam(defaultValue = "1") int page, Model model) {
-		Page<Vet> paginated = findPaginated(page);
+		Page<Vet> paginated = ProductTelemetry.record("petclinic.vet.looked_up", "format", "html",
+				() -> findPaginated(page));
 		return addPaginationModel(page, paginated, model);
 	}
 
@@ -67,7 +69,9 @@ class VetController {
 		// Here we are returning an object of type 'Vets' rather than a collection of Vet
 		// objects so it is simpler for JSon/Object mapping
 		Vets vets = new Vets();
-		vets.getVetList().addAll(this.vetRepository.findAll());
+		vets.getVetList()
+			.addAll(ProductTelemetry.record("petclinic.vet.looked_up", "format", "json",
+					() -> this.vetRepository.findAll()));
 		return vets;
 	}
 

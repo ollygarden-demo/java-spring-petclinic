@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.samples.petclinic.system.ProductTelemetry;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -105,8 +106,10 @@ class VisitController {
 			return "pets/createOrUpdateVisitForm";
 		}
 
-		owner.addVisit(petId, visit);
-		this.owners.save(owner);
+		ProductTelemetry.record("petclinic.visit.booked", () -> {
+			owner.addVisit(petId, visit);
+			this.owners.save(owner);
+		});
 		redirectAttributes.addFlashAttribute("message", "Your visit has been booked");
 		return "redirect:/owners/{ownerId}";
 	}

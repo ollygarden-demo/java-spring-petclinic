@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.springframework.samples.petclinic.system.ProductTelemetry;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.Assert;
@@ -120,8 +121,10 @@ class PetController {
 			return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
 		}
 
-		owner.addPet(pet);
-		this.owners.save(owner);
+		ProductTelemetry.record("petclinic.pet.registered", () -> {
+			owner.addPet(pet);
+			this.owners.save(owner);
+		});
 		redirectAttributes.addFlashAttribute("message", "New Pet has been Added");
 		return "redirect:/owners/{ownerId}";
 	}
