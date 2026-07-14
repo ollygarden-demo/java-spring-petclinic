@@ -21,6 +21,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.samples.petclinic.system.ProductUsageMetrics;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -53,9 +54,12 @@ class PetController {
 
 	private final PetTypeRepository types;
 
-	public PetController(OwnerRepository owners, PetTypeRepository types) {
+	private final ProductUsageMetrics productUsageMetrics;
+
+	public PetController(OwnerRepository owners, PetTypeRepository types, ProductUsageMetrics productUsageMetrics) {
 		this.owners = owners;
 		this.types = types;
+		this.productUsageMetrics = productUsageMetrics;
 	}
 
 	@ModelAttribute("types")
@@ -122,6 +126,7 @@ class PetController {
 
 		owner.addPet(pet);
 		this.owners.save(owner);
+		this.productUsageMetrics.petRegistered();
 		redirectAttributes.addFlashAttribute("message", "New Pet has been Added");
 		return "redirect:/owners/{ownerId}";
 	}
