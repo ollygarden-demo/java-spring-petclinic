@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.samples.petclinic.system.ProductUsageTelemetry;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,8 +45,11 @@ class VisitController {
 
 	private final OwnerRepository owners;
 
-	public VisitController(OwnerRepository owners) {
+	private final ProductUsageTelemetry productUsage;
+
+	public VisitController(OwnerRepository owners, ProductUsageTelemetry productUsage) {
 		this.owners = owners;
+		this.productUsage = productUsage;
 	}
 
 	@InitBinder
@@ -107,6 +111,7 @@ class VisitController {
 
 		owner.addVisit(petId, visit);
 		this.owners.save(owner);
+		this.productUsage.visitBooked();
 		redirectAttributes.addFlashAttribute("message", "Your visit has been booked");
 		return "redirect:/owners/{ownerId}";
 	}

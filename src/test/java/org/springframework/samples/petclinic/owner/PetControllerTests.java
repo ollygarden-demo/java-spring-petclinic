@@ -64,6 +64,9 @@ class PetControllerTests {
 	@MockitoBean
 	private PetTypeRepository types;
 
+	@MockitoBean
+	private org.springframework.samples.petclinic.system.ProductUsageTelemetry productUsage;
+
 	@BeforeEach
 	void setup() {
 		PetType cat = new PetType();
