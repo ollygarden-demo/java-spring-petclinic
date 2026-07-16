@@ -21,6 +21,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.samples.petclinic.system.ProductTelemetry;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -53,9 +54,12 @@ class PetController {
 
 	private final PetTypeRepository types;
 
-	public PetController(OwnerRepository owners, PetTypeRepository types) {
+	private final ProductTelemetry telemetry;
+
+	public PetController(OwnerRepository owners, PetTypeRepository types, ProductTelemetry telemetry) {
 		this.owners = owners;
 		this.types = types;
+		this.telemetry = telemetry;
 	}
 
 	@ModelAttribute("types")
@@ -122,6 +126,7 @@ class PetController {
 
 		owner.addPet(pet);
 		this.owners.save(owner);
+		this.telemetry.petRegistered();
 		redirectAttributes.addFlashAttribute("message", "New Pet has been Added");
 		return "redirect:/owners/{ownerId}";
 	}

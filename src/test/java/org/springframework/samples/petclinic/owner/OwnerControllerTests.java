@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledInNativeImage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.samples.petclinic.system.ProductTelemetry;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -67,6 +68,9 @@ class OwnerControllerTests {
 
 	@MockitoBean
 	private OwnerRepository owners;
+
+	@MockitoBean
+	private ProductTelemetry telemetry;
 
 	private Owner george() {
 		Owner george = new Owner();

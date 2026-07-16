@@ -22,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledInNativeImage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.samples.petclinic.system.ProductTelemetry;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.test.context.aot.DisabledInAotMode;
@@ -63,6 +64,9 @@ class PetControllerTests {
 
 	@MockitoBean
 	private PetTypeRepository types;
+
+	@MockitoBean
+	private ProductTelemetry telemetry;
 
 	@BeforeEach
 	void setup() {

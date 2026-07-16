@@ -22,6 +22,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.samples.petclinic.system.ProductTelemetry;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -52,8 +53,11 @@ class OwnerController {
 
 	private final OwnerRepository owners;
 
-	public OwnerController(OwnerRepository owners) {
+	private final ProductTelemetry telemetry;
+
+	public OwnerController(OwnerRepository owners, ProductTelemetry telemetry) {
 		this.owners = owners;
+		this.telemetry = telemetry;
 	}
 
 	@InitBinder
@@ -82,6 +86,7 @@ class OwnerController {
 		}
 
 		this.owners.save(owner);
+		this.telemetry.ownerCreated();
 		redirectAttributes.addFlashAttribute("message", "New Owner Created");
 		return "redirect:/owners/" + owner.getId();
 	}
